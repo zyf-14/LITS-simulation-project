@@ -21,6 +21,7 @@ print("[INFO] Line following running – Ctrl-C to stop")
 white_start_ts = None
 last_print_ts  = 0
 
+
 try:
     while True:
         left, right = sensor.read()
