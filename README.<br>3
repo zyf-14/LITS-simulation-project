@@ -1,1 +1,9 @@
 .github/workflows/.keep
+docs/.keep
+hardware/3d_models/.keep
+hardware/pcb/.keep
+src/arduino/.keep
+src/raspberry/.keep
+examples/.keep
+tests/arduino/.keep
+tests/raspberry/.keep
