@@ -16,6 +16,7 @@ The repo contains 3‑D CAD models, Arduino/ESP32 firmware, and Raspberry Pi c
 - [Testing](#testing)
 - [Contributing](#contributing)
 - [License](#license)
+- [3D CAD schematics](https://cad.onshape.com/documents/3a9c78263ff22dc350c29a50/w/96404cf1ed0ead9f22eaefd4/e/8b10ad415629b44db3a26b1b?renderMode=0&uiState=69db475893e9b9c5b1197a1b)
 
 ## Overview
 - **Simulation core** – Python‑based vehicle dynamics (`virtual_test.py`).  
