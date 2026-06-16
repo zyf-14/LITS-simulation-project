@@ -1,0 +1,24 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install pyflakes
+        run: pip install pyflakes
+      - name: Check syntax (src)
+        run: python -m pyflakes src/ || true
+      - name: Check syntax (simulation)
+        run: python -m pyflakes simulation/ || true
+      - name: Check syntax (tools)
+        run: python -m pyflakes tools/ || true

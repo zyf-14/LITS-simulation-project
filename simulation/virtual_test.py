@@ -1,3 +1,4 @@
+import sys
 import cv2
 import numpy as np
 
@@ -9,7 +10,8 @@ DOMINANCE_RATIO = 1.5
 MIN_TOTAL_BLACK_PX = 1000
 
 # --- Settings ---
-VIDEO_PATH = r"C:\Users\harry\LITS internship 2025\Line following program\route1.mp4"  # Replace with your actual path
+# Usage: python virtual_test.py <path_to_video>
+VIDEO_PATH = sys.argv[1] if len(sys.argv) > 1 else "route1.mp4"
 calibration_x = None  # Will be set from the first valid frame
 
 # --- Thresholding Function ---

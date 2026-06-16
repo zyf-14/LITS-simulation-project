@@ -7,7 +7,7 @@ import camera  # Future use
 import threading
 
 trigger_phase = 0
-### ignore_sensors_until = 1
+ignore_sensors_until = 0  # epoch time; main.py skips both-black triggers until this time passes
 
 def handle_both_black():
     global trigger_phase
