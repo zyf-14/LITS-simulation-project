@@ -35,6 +35,13 @@ LITS-simulation-project/
 │       ├── Boom gate/        # STL files for the boom gate assembly
 │       └── Custom Motor driver PCB schematics.pdf
 │
+├── setup/                # ESP32 firmware for the boom gate (PlatformIO project)
+│   ├── src/main.cpp          # Main firmware — FreeRTOS tasks, servo, ultrasonic, Wi-Fi
+│   ├── include/
+│   │   ├── config.example.h  # Credential template — copy to config.h and fill in
+│   │   └── config.h          # Your credentials (gitignored, never committed)
+│   └── platformio.ini        # PlatformIO board and library config
+│
 ├── archive/              # Earlier experimental variants (kept for reference)
 │
 ├── requirements.txt
@@ -45,6 +52,7 @@ LITS-simulation-project/
 
 ## Hardware
 
+### RC Car
 | Component | Detail |
 |---|---|
 | Platform | RC car chassis with custom 3D-printed body |
@@ -53,6 +61,14 @@ LITS-simulation-project/
 | Drive motor | DC motor via L298N-style driver (BIN1=GPIO27, BIN2=GPIO17) |
 | Line sensors | 2× IR sensors (LEFT=GPIO22, RIGHT=GPIO25) |
 | Camera | Raspberry Pi Camera Module (PiCamera2) |
+
+### Boom Gate
+| Component | Detail |
+|---|---|
+| Controller | ESP32 (DOIT DevKit V1) |
+| Gate servo | SG90 on GPIO 13 |
+| Distance sensors | 2× HC-SR04 ultrasonic (Sensor 1: TRIG=2, ECHO=5 / Sensor 2: TRIG=18, ECHO=15) |
+| Status LED | GPIO 4 |
 
 3D CAD models are in `hardware/cad/`. The full OnShape design is at:
 [View OnShape model](https://cad.onshape.com/documents/3a9c78263ff22dc350c29a50/w/96404cf1ed0ead9f22eaefd4/e/8b10ad415629b44db3a26b1b)
@@ -91,6 +107,49 @@ python manual_drive.py
 cd tools
 python calibrate_servo.py
 # o = centre, l = left, r = right, q = quit
+```
+
+---
+
+## Boom Gate Firmware Setup
+
+The boom gate runs on an ESP32 and is flashed using **PlatformIO** (a VS Code extension — no separate Arduino IDE needed).
+
+### 1. Install PlatformIO
+
+1. Install [VS Code](https://code.visualstudio.com/)
+2. Open the Extensions panel (`Ctrl+Shift+X`) and search for **PlatformIO IDE**
+3. Install it and restart VS Code
+
+### 2. Configure credentials
+
+```bash
+cp setup/include/config.example.h setup/include/config.h
+```
+
+Open `config.h` and fill in your Wi-Fi SSID, password, and Pi server IP. This file is gitignored and will never be committed.
+
+### 3. Flash to the ESP32
+
+1. Open the `setup/` folder in VS Code — PlatformIO will detect `platformio.ini` automatically
+2. Connect the ESP32 via USB
+3. Click the **Upload** button (→ arrow) in the PlatformIO toolbar, or run:
+
+```bash
+cd setup
+pio run --target upload
+```
+
+### 4. Monitor serial output
+
+```bash
+cd setup
+pio device monitor
+```
+
+Or connect via Telnet on port 23 from any device on the same network:
+```bash
+telnet <ESP32_IP> 23
 ```
 
 ---
