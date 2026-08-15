@@ -1,0 +1,16 @@
+[Unit]
+Description=RC car cycle control server (track_run.py / reset_to_home.py wrapper)
+After=network-online.target pigpiod.service
+Wants=network-online.target
+Requires=pigpiod.service
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/home/pi/Desktop/codev3
+ExecStart=/usr/bin/python3 -u /home/pi/Desktop/codev3/cycle_server.py
+Restart=on-failure
+RestartSec=2
+
+[Install]
+WantedBy=multi-user.target
