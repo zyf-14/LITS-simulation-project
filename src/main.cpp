@@ -10,6 +10,11 @@ volatile bool     gate_is_open = false;
 volatile bool     vehicle_at_entry = false;
 volatile bool     vehicle_at_exit  = false;
 volatile uint32_t total_uptime = 0;
+// Set when exit-clear wants to notify the terminal Pi "vehicle left" but
+// vehicle_at_entry is true at that moment (so the notify is suppressed to
+// avoid resetting an in-progress LPR cycle) - consumed on entry's next
+// clear-confirm edge instead of being dropped. See taskSensors.
+volatile bool     pendingVehicleLeftNotify = false;
 
 void setup() {
     Serial.begin(115200);
@@ -348,6 +353,11 @@ void taskSensors(void *pvParameters) {
                         vehicle_at_entry = false;
                         entry_clear_since = 0;
                         Serial.println("[ENTRY] Vehicle cleared entry zone");
+                        if (pendingVehicleLeftNotify) {
+                            pendingVehicleLeftNotify = false;
+                            Serial.println("[ENTRY] Sending deferred vehicle-left notification now that entry is clear");
+                            notifyTerminalPiVehicleLeft();
+                        }
                         if (CLOSE_ON_ENTRY_CLEAR) {
                             // Test mode: the exit sensor's reset call is fully disabled
                             // (see the exit block below), and it was the ONLY thing that
@@ -415,7 +425,15 @@ void taskSensors(void *pvParameters) {
                                 boomgate_status = GATE_CLOSE;
                             }
                         } else {
-                            Serial.println("[EXIT] Skipping terminal-Pi reset - vehicle still at entry, an in-progress LPR cycle shouldn't be reset by exit-zone noise");
+                            // Don't just drop this - defer it. vehicle_at_entry can flip
+                            // true again shortly after (e.g. this same car crossing back
+                            // over the entry sensor in reverse, as happens every cycle on
+                            // this single-lane demo track), and a dropped notify left the
+                            // terminal Pi's LPR cycle stuck thinking the car never left,
+                            // which kept re-forcing the gate open on its own retry timer -
+                            // defeating the vehicle_inside_flag re-entry block entirely.
+                            pendingVehicleLeftNotify = true;
+                            Serial.println("[EXIT] Deferring terminal-Pi reset - vehicle still at entry, will resend once entry clears");
                             if (gate_is_open) {
                                 boomgate_status = GATE_CLOSE;
                             }
