@@ -56,7 +56,7 @@ TERMINAL_PI_RESET_COMPLETE_URL = "http://192.168.1.15/reset_complete.php"
 
 WAIT_AT_TRIGGER2_S    = 3
 DRIVE_INTO_WALL_S     = 1
-REVERSE_PAST_HOME_S   = 5
+REVERSE_PAST_HOME_S   = 3
 CORRECTION_HOLD_S     = 0.2  # ported from main.py's auto line-correction
 LOOP_DELAY            = 0.02  # tightened from 0.05 - at low torque the car can stick then
                               # suddenly lurch forward, and a coarser poll interval risks
