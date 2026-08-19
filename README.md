@@ -5,6 +5,8 @@
 
 A low-inertia transit system (LITS) built on an autonomous RC car platform. The car follows a black line on the ground using IR sensors, handles intersection triggers, and can be driven manually via keyboard. This repo contains the Raspberry Pi control software, 3D CAD models, and a PC-side video analysis tool.
 
+> **Current status:** the active RC car implementation is in [`rc_car/`](rc_car/) (`track_run.py` + `cycle_server.py`, installed as a systemd service) and the active boom-gate firmware is in [`setup/`](setup/). `src/`, `tools/`, and `simulation/` below are an earlier iteration of the same car, kept for reference — see `archive/` for older experiments. For system architecture, network layout, and the full operating procedure for the LPR car-park demo this project now drives, see the handover documentation supplied alongside this repo.
+
 ---
 
 ## Folder Structure
