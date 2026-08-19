@@ -68,11 +68,8 @@ constexpr int LED_INDICATOR = 2;
 
 // ===== Boom servo =====
 constexpr int SERVO_PIN    = 13;
-constexpr int OPEN_ANGLE   = 110;
-// A couple degrees off the hard mechanical stop, rather than exactly 0 - sitting right
-// at the stop can leave the servo pushing/holding against it continuously (extra current
-// draw), which doesn't help the shared-rail power situation.
-constexpr int CLOSED_ANGLE = 4;
+constexpr int OPEN_ANGLE   = 85;
+constexpr int CLOSED_ANGLE = 9;
 constexpr unsigned long GATE_TRIGGER_COOLDOWN_MS = 100;
 
 enum GateCommand : uint8_t {
